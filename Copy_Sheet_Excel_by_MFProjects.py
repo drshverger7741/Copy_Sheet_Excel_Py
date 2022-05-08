@@ -51,13 +51,15 @@ wb2.app.quit()
 # удаление ненужных листов
 wb = openpyxl.load_workbook(final_file)
 sheets = wb.sheetnames
+list_sheet_final_file = config.get('final_name_file', 'list_sheet_final_file').split(",")
 for sheet in sheets:
-    if sheet not in config['files_sheet'].values():
+    if sheet not in list_sheet_final_file:
         pfd = wb[sheet]
         wb.remove(pfd)
+        logging.info("Лист: " + sheet + " не из списка list_sheet_final_file удален успешно")
 sheets = wb.sheetnames
 wb.save(final_file)
-logging.info("Листы отсортированы")
+logging.info("Листы не из списка list_sheet_final_file удалены успешно")
 
 # уведомление на W10
 try:
@@ -65,6 +67,6 @@ try:
                               app_name='Copy_Sheet_Excel_by_MFProjects.exe',
                               title="Копирование листов успешно выполнено!")
 except:
-    logging.error("Невозможно отобразить уведомление виндоус 10 о завершеии работы")
+    logging.error("Невозможно отобразить уведомление windows 10 о завершении работы")
 finally:
     logging.info("Копирование листов успешно выполнено!")
