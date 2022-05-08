@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(
-    ['Copy_Sheet_Excel.py'],
+    ['Copy_Sheet_Excel', 'by', 'MFProjects.py'],
     pathex=[],
     binaries=[],
     datas=[],
