@@ -53,11 +53,17 @@ wb = openpyxl.load_workbook(final_file)
 sheets = wb.sheetnames
 list_sheet_final_file = config.get('final_name_file', 'list_sheet_final_file').split(",")
 for sheet in sheets:
-    if sheet not in list_sheet_final_file:
+    if config.getboolean('final_name_file', 'create_new_file') and sheet == "Sheet":
+        pfd = wb[sheet]
+        wb.remove(pfd)
+        logging.info("Лист: " + sheet + " не из списка list_sheet_final_file удален успешно")
+    if not config.getboolean('final_name_file',
+                             'create_new_file') and sheet not in list_sheet_final_file:
         pfd = wb[sheet]
         wb.remove(pfd)
         logging.info("Лист: " + sheet + " не из списка list_sheet_final_file удален успешно")
 sheets = wb.sheetnames
+print(sheets)
 wb.save(final_file)
 logging.info("Листы не из списка list_sheet_final_file удалены успешно")
 
