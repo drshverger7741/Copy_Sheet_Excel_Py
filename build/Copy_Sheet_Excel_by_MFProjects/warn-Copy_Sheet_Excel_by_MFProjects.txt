@@ -14,11 +14,9 @@ Types if import:
 IMPORTANT: Do NOT post this list to the issue-tracker. Use it as a basis for
             tracking down the missing module yourself. Thanks!
 
-missing module named org - imported by copy (optional)
+missing module named 'org.python' - imported by copy (optional), xml.sax (delayed, conditional)
 missing module named _frozen_importlib_external - imported by importlib._bootstrap (delayed), importlib (optional), importlib.abc (optional), zipimport (top-level)
 excluded module named _frozen_importlib - imported by importlib (optional), importlib.abc (optional), zipimport (top-level)
-missing module named posix - imported by os (conditional, optional), shutil (conditional)
-missing module named resource - imported by posix (top-level), test.support (optional)
 missing module named grp - imported by shutil (optional), tarfile (optional), pathlib (delayed)
 missing module named urllib.quote - imported by urllib (optional), xlwings.mistune.util (optional)
 missing module named _posixsubprocess - imported by subprocess (optional), multiprocessing.util (delayed)
@@ -39,7 +37,7 @@ missing module named vms_lib - imported by platform (delayed, conditional, optio
 missing module named java - imported by platform (delayed)
 missing module named _winreg - imported by platform (delayed, optional)
 missing module named readline - imported by cmd (delayed, conditional, optional), code (delayed, conditional, optional), pdb (delayed, optional)
-missing module named 'org.python' - imported by pickle (optional), xml.sax (delayed, conditional)
+missing module named org - imported by pickle (optional)
 missing module named pyimod03_importers - imported by C:\Copy_Sheet_Excel_Py\venv\Lib\site-packages\PyInstaller\hooks\rthooks\pyi_rth_pkgutil.py (top-level)
 missing module named requests - imported by xlwings.pro.module_permissions (optional)
 missing module named cryptography - imported by xlwings.pro.utils (optional)
@@ -64,3 +62,5 @@ missing module named 'lxml.etree' - imported by openpyxl.xml.functions (conditio
 missing module named tests.KEEP_VBA - imported by tests (optional), openpyxl.reader.excel (optional)
 missing module named defusedxml - imported by openpyxl.xml (delayed, optional)
 missing module named lxml - imported by openpyxl.xml (delayed, optional)
+missing module named posix - imported by os (conditional, optional), shutil (conditional)
+missing module named resource - imported by posix (top-level), test.support (optional)
