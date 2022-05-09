@@ -1,6 +1,7 @@
 import configparser
 import logging
 import os
+import shutil
 
 import openpyxl
 import plyer
@@ -17,13 +18,26 @@ logging.info('Получение данных настройки из settings.i
 # удаление старого финального файла при наличии
 final_file = config.get('final_name_file',
                         'final_file')
-if os.path.isfile(final_file):
-    os.remove(final_file)
+# if os.path.isfile(final_file):
+#     os.remove(final_file)
 
 # создание финального файла
 wb = openpyxl.Workbook()
-wb.save(final_file)
-logging.info("Создан новый файл: " + final_file)
+wb.save('1.xlsx')
+if config.getboolean('final_name_file', 'create_new_file'):
+    shutil.copyfile('1.xlsx', final_file)
+    logging.info("Создан новый файл: " + final_file)
+elif os.path.isfile(final_file):
+    logging.info(
+        "Новый файл не будет создан все копирование будет в существующий: " + final_file +
+        ". Пожалуйста не забудьте в настройках settings.ini указать какие лиcты необходимо сохранить"
+        " в финальном файле после копирования")
+else:
+    logging.info(
+        "Файла с таким именем не найдено(поэтому будет создан новый пустой и туда будут скопированы листы: "
+        + final_file)
+    shutil.copyfile('1.xlsx', final_file)
+os.remove('1.xlsx')
 
 # копирование листов
 logging.info("Началось копирование листов в " + final_file)
