@@ -8,7 +8,7 @@ import plyer
 import xlwings as xw
 
 config = configparser.ConfigParser()
-config.read('settings.ini')
+config.read('settings.ini',encoding='utf-8')
 logging.basicConfig(filename=config.get('debug',
                                         'log_file'),
                     filemode="w",
