@@ -4,22 +4,18 @@ import os
 import shutil
 
 import openpyxl
-import plyer
 import xlwings as xw
 
 config = configparser.ConfigParser()
-config.read('settings.ini',encoding='utf-8')
+config.read('settings.ini', encoding='utf-8')
 logging.basicConfig(filename=config.get('debug',
                                         'log_file'),
                     filemode="w",
                     level=logging.INFO,
                     format="%(asctime)s - %(levelname)s - %(funcName)s: %(lineno)d - %(message)s")
 logging.info('Получение данных настройки из settings.ini')
-# удаление старого финального файла при наличии
 final_file = config.get('final_name_file',
                         'final_file')
-# if os.path.isfile(final_file):
-#     os.remove(final_file)
 
 # создание финального файла
 wb = openpyxl.Workbook()
@@ -70,7 +66,6 @@ for sheet in sheets:
     if config.getboolean('final_name_file', 'create_new_file') and sheet == "Sheet":
         pfd = wb[sheet]
         wb.remove(pfd)
-        logging.info("Лист: " + sheet + " не из списка list_sheet_final_file удален успешно")
     if not config.getboolean('final_name_file',
                              'create_new_file') and sheet not in list_sheet_final_file:
         pfd = wb[sheet]
@@ -80,13 +75,4 @@ sheets = wb.sheetnames
 print(sheets)
 wb.save(final_file)
 logging.info("Листы не из списка list_sheet_final_file удалены успешно")
-
-# уведомление на W10
-try:
-    plyer.notification.notify(message="Копирование листов успешно выполнено!",
-                              app_name='Copy_Sheet_Excel_by_MFProjects.exe',
-                              title="Копирование листов успешно выполнено!")
-except:
-    logging.error("Невозможно отобразить уведомление windows 10 о завершении работы")
-finally:
-    logging.info("Копирование листов успешно выполнено!")
+logging.info("Копирование листов успешно выполнено!")
