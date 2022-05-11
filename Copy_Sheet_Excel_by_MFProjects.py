@@ -17,6 +17,17 @@ logging.info('Получение данных настройки из settings.i
 final_file = config.get('final_name_file',
                         'final_file')
 
+# Если хотим копировать первые листы всех файлов в директории
+if config.getboolean('final_name_file', 'copy_first_sheet_allfiles'):
+    if os.path.isfile(final_file):
+        os.remove(final_file)
+    logging.info('Будет произведено копирование всех листов из директории в один новый файл')
+fileDir = os.getcwd()
+fileExtLISTx = [os.path.join(fileDir, _) for _ in os.listdir(fileDir) if _.endswith(r".xlsx")]
+fileExtLIS = [os.path.join(fileDir, _) for _ in os.listdir(fileDir) if _.endswith(r".xls")]
+fileExtLIST = fileExtLISTx + fileExtLIS
+print(fileExtLIST)
+
 # создание финального файла
 wb = openpyxl.Workbook()
 wb.save('1.xlsx')
@@ -44,19 +55,33 @@ wb2 = xw.Book(final_file,
                                              'update_links'),
               notify=config.getboolean('final_name_file',
                                        'notify'))
-for key, value in config['files_sheet'].items():
-    path1 = key
-    wb1 = xw.Book(path1,
-                  update_links=config.getboolean('every_file',
-                                                 'update_links'),
-                  notify=config.getboolean('every_file',
-                                           'notify'))
-    ws1 = wb1.sheets(value)
-    ws1.api.Copy(Before=None, After=wb2.sheets(wb2.sheets.count).api)
-    wb2.save()
-    logging.info("Лист " + value + " из книги " + key + " успешно скопирован в " + final_file)
-    wb1.close()
-wb2.app.quit()
+if config.getboolean('final_name_file', 'copy_first_sheet_allfiles'):
+    for all_xl in fileExtLIST:
+        wb1 = xw.Book(all_xl,
+                      update_links=config.getboolean('every_file',
+                                                     'update_links'),
+                      notify=config.getboolean('every_file',
+                                               'notify'))
+        ws1 = wb1.sheets(config.getint('final_name_file', 'copy_first_sheet_allfiles_number'))
+        ws1.api.Copy(Before=None, After=wb2.sheets(wb2.sheets.count).api)
+        wb2.save()
+        logging.info("Лист из книги " + all_xl + " успешно скопирован в " + final_file)
+        wb1.close()
+    wb2.app.quit()
+else:
+    for key, value in config['files_sheet'].items():
+        path1 = key
+        wb1 = xw.Book(path1,
+                      update_links=config.getboolean('every_file',
+                                                     'update_links'),
+                      notify=config.getboolean('every_file',
+                                               'notify'))
+        ws1 = wb1.sheets(value)
+        ws1.api.Copy(Before=None, After=wb2.sheets(wb2.sheets.count).api)
+        wb2.save()
+        logging.info("Лист " + value + " из книги " + key + " успешно скопирован в " + final_file)
+        wb1.close()
+    wb2.app.quit()
 
 # удаление ненужных листов
 wb = openpyxl.load_workbook(final_file)
@@ -74,5 +99,4 @@ for sheet in sheets:
 sheets = wb.sheetnames
 print(sheets)
 wb.save(final_file)
-logging.info("Листы не из списка list_sheet_final_file удалены успешно")
 logging.info("Копирование листов успешно выполнено!")
